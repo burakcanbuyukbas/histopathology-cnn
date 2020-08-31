@@ -6,6 +6,7 @@ from glob import glob
 import fnmatch
 from sklearn.model_selection import train_test_split
 import random
+from matplotlib import pyplot as plt
 
 
 def get_data():
@@ -196,6 +197,24 @@ def divideToFolders():
     print("Y_val: " + str(np.array(Y_val).shape))
     print("X_test: " + str(np.array(X_test).shape))
     print("Y_test: " + str(np.array(Y_test).shape))
+
+
+def plot_acc(model):
+    plt.plot(model.history['accuracy'])
+    plt.plot(model.history['val_accuracy'])
+    plt.title('model accuracy')
+    plt.ylabel('accuracy')
+    plt.xlabel('epoch')
+    plt.legend(['train', 'val'], loc='upper left')
+    plt.show()
+def plot_loss(model):
+    plt.plot(model.history['loss'])
+    plt.plot(model.history['val_loss'])
+    plt.title('model loss')
+    plt.ylabel('loss')
+    plt.xlabel('epoch')
+    plt.legend(['train', 'val'], loc='upper left')
+    plt.show()
 #X, Y = get_data()
 #save_data(X, Y)
 #divideToFolders()

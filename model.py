@@ -14,22 +14,23 @@ from keras.applications.resnet50 import ResNet50 as ResNet, preprocess_input as 
 from keras.regularizers import l2
 from keras.utils import to_categorical
 import keras.metrics
-from keras.applications.inception_v3 import preprocess_input
 
 
-def create_ResNet50_model():
-    model = ResNet(weights='imagenet', include_top=False,
-                   input_shape=None, pooling='avg')
-    x = model.output
-    x = Dropout(0.5)(x)
+def create_ResNet50_model(dropout=0.5, image_size=100):
+    resnet = ResNet(weights='imagenet', include_top=False,
+                   input_shape=(image_size, image_size, 3), pooling='avg')
+    x = resnet.output
+    x = Dropout(dropout)(x)
     preds = Dense(2, activation='softmax')(x)
-    model = Model(inputs=model.input, outputs=preds)
+    model = Model(inputs=resnet.input, outputs=preds)
+    for layer in resnet.layers:
+        layer.trainable = False
 
     return model
 
-def create_custom_model():
+def create_custom_model(image_size=100):
     model = Sequential()
-    model.add(Conv2D(16, kernel_size=3, activation='relu', padding='same', input_shape=(100, 100, 3)))
+    model.add(Conv2D(16, kernel_size=3, activation='relu', padding='same', input_shape=(image_size, image_size, 3)))
     model.add(Conv2D(16, kernel_size=3, activation='relu', padding='same'))
     model.add(Conv2D(16, kernel_size=3, activation='relu', padding='same'))
     model.add(MaxPooling2D(pool_size=2))
