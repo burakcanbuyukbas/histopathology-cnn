@@ -38,31 +38,33 @@ class_weights = {0: 1.0,
 model = create_ResNet50_model(image_size)
 
 
-print("Stage 1: Transfer Learning")
+# print("Stage 1: Transfer Learning")
+#
+# model.compile(loss='categorical_crossentropy', optimizer=Adam(0.001), metrics=['accuracy'])
+#
+# history = model.fit(train_generator,
+#                     steps_per_epoch=train_generator.samples // batch_size,
+#                     epochs=3,
+#                     callbacks=callbacks,
+#                     validation_data=val_generator,
+#                     validation_steps=val_generator.samples // batch_size,
+#                     class_weight=class_weights,
+#                     verbose=2)
+#
+# print("First stage done.")
+model.load_weights("checkpoints/resnet/checkpoint-03-0.72.hdf5")
+print("Model loaded.")
 
-model.compile(loss='categorical_crossentropy', optimizer=Adam(0.001), metrics=['accuracy'])
-
-history = model.fit(train_generator,
-                    steps_per_epoch=train_generator.samples // batch_size,
-                    epochs=3,
-                    callbacks=callbacks,
-                    validation_data=val_generator,
-                    validation_steps=val_generator.samples // batch_size,
-                    class_weight=class_weights,
-                    verbose=2)
-
-print("First stage done.")
-
-try:
-    val_loss_history = history.history['val_loss']
-    val_acc_history = history.history['val_accuracy']
-    loss_history = history.history['loss']
-    acc_history = history.history['accuracy']
-except KeyError:
-    val_loss_history = []
-    val_acc_history = []
-    loss_history = []
-    acc_history = []
+# try:
+#     val_loss_history = history.history['val_loss']
+#     val_acc_history = history.history['val_accuracy']
+#     loss_history = history.history['loss']
+#     acc_history = history.history['accuracy']
+# except KeyError:
+val_loss_history = []
+val_acc_history = []
+loss_history = []
+acc_history = []
 
 
 
@@ -75,7 +77,7 @@ model.compile(loss='categorical_crossentropy', optimizer=Adam(0.0001), metrics=[
 
 history = model.fit(train_generator,
                     steps_per_epoch=train_generator.samples // batch_size,
-                    epochs=5,
+                    epochs=3,
                     callbacks=callbacks,
                     validation_data=val_generator,
                     validation_steps=val_generator.samples // batch_size,
